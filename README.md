@@ -43,7 +43,6 @@ Para explorar e reproduzir este pipeline de dados em sua máquina, siga os passo
     ```bash
     pip install pandas jupyter
     ```
-    (Se houver outras bibliotecas usadas, adicione-as aqui, por exemplo: `pip install pandas jupyter numpy matplotlib seaborn`)
 
 5.  **Inicie o Jupyter Notebook:**
     ```bash
