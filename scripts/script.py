@@ -62,7 +62,7 @@ def join(dadosA, dadosB):
 
 # transformação dos dados em tabela
 def trasformando_dados_tabela(dados, nome_colunas):
-    dados_combinados_tabela = nome_colunas
+    dados_combinados_tabela = [nome_colunas]
 
     for row in dados:
         linha = []
@@ -71,6 +71,13 @@ def trasformando_dados_tabela(dados, nome_colunas):
         dados_combinados_tabela.append(linha)
     
     return dados_combinados_tabela
+
+# salvar os dados
+def salvando_dados(caminho, dados):
+    with open(caminho, 'w') as file:
+        writer = csv.writer(file)
+        writer.writerows(dados)
+
 
 path_json = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaA.json'
 path_csv = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaB.csv'
@@ -117,6 +124,7 @@ print(tamanho_dados_fusao)
 ##  salvando os dados em uma nova estrutura, não mais em uma lista
 dados_fusao_tabela = trasformando_dados_tabela(dados_fusao, nomes_colunas_fusao)
 
+path_dados_combinados = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_processed\dados_combinados.csv'
 
-
-
+salvando_dados(path_dados_combinados,dados_fusao_tabela)
+print(path_dados_combinados)
