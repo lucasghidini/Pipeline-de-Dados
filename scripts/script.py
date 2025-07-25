@@ -54,7 +54,7 @@ def tamanho_dados(dados):
     return len(dados)
 
 # função de juntar os dados
-def juntando_dados(dadosA, dadosB):
+def join(dadosA, dadosB):
     lista_combinada = []
     lista_combinada.extend(dadosA)
     lista_combinada.extend(dadosB)
@@ -91,6 +91,14 @@ print(f'Tamanho dos dados csv: {tamanho_dados_csv}')
 
 tamanho_dados_json = tamanho_dados(dados_json)
 print(f'Tamanho dos dados json: {tamanho_dados_json}')
+
+# Junção dos dados
+dados_fusao = join(dados_csv, dados_json)
+nomes_colunas_fusao = get_columns(dados_fusao)
+tamanho_dados_fusao = tamanho_dados(dados_fusao)
+
+print(nomes_colunas_fusao)
+print(tamanho_dados_fusao)
 
 
 
