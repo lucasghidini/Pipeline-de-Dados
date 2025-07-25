@@ -13,7 +13,6 @@ def leitura_dos_dados(path, tipo_arquivo):
 
     return dados
 
-
 # função de leitura dos dados .json
 def  leitura_json(path_json):
     dados_json = []
@@ -21,7 +20,6 @@ def  leitura_json(path_json):
         dados_json = json.load(file)
 
     return dados_json
-
 
 # função de leitura dos dados .csv   
 def leitura_csv(path_csv):
@@ -38,6 +36,7 @@ def leitura_csv(path_csv):
 def get_columns(dados):
     return list(dados[0].keys())
 
+# função para renomear as colunas dos dados csv
 def renomeando_colunas(dados, key_mapping):
     new_dados_csv = []
 
@@ -50,12 +49,17 @@ def renomeando_colunas(dados, key_mapping):
 
     return new_dados_csv
 
+# função para a contagem dos dados
+def tamanho_dados(dados):
+    return len(dados)
+
 # função de juntar os dados
 def juntando_dados(dadosA, dadosB):
     lista_combinada = []
     lista_combinada.extend(dadosA)
     lista_combinada.extend(dadosB)
     return lista_combinada
+
 
 path_json = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaA.json'
 path_csv = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaB.csv'
@@ -81,8 +85,12 @@ dados_csv = renomeando_colunas(dados_csv, key_mapping)
 nome_colunas_csv = get_columns(dados_csv)
 print(f"Novas colunas do arquivo csv: {nome_colunas_csv}")
 
-# junçao dos dados
+# Calculando o tamanho dos dados
+tamanho_dados_csv = tamanho_dados(dados_csv)
+print(f'Tamanho dos dados csv: {tamanho_dados_csv}')
 
+tamanho_dados_json = tamanho_dados(dados_json)
+print(f'Tamanho dos dados json: {tamanho_dados_json}')
 
 
 
