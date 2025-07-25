@@ -60,16 +60,21 @@ def join(dadosA, dadosB):
     lista_combinada.extend(dadosB)
     return lista_combinada
 
+# transformação dos dados em tabela
+def trasformando_dados_tabela(dados, nome_colunas):
+    dados_combinados_tabela = nome_colunas
+
+    for row in dados:
+        linha = []
+        for coluna in nome_colunas:
+            linha.append(row.get(coluna, 'Indisponivel'))
+        dados_combinados_tabela.append(linha)
+    
+    return dados_combinados_tabela
 
 path_json = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaA.json'
 path_csv = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaB.csv'
 
-key_mapping = {'Nome do Item': 'Nome do Produto',
-                'ClassificaÃ§Ã£o do Produto': 'Categoria do Produto',
-                'Valor em Reais (R$)': 'Preço do Produto (R$)',
-                'Quantidade em Estoque': 'Quantidade em Estoque',
-                'Nome da Loja': 'Filial',
-                'Data da Venda': 'Data da Venda'}
 
 # leitura
 dados_json = leitura_dos_dados(path_json, 'json')
@@ -81,6 +86,13 @@ nome_colunas_csv = get_columns(dados_csv)
 print(f'Nome das colunas do arquivo csv: {nome_colunas_csv}')
 
 # transformação dos dados
+key_mapping = {'Nome do Item': 'Nome do Produto',
+                'ClassificaÃ§Ã£o do Produto': 'Categoria do Produto',
+                'Valor em Reais (R$)': 'Preço do Produto (R$)',
+                'Quantidade em Estoque': 'Quantidade em Estoque',
+                'Nome da Loja': 'Filial',
+                'Data da Venda': 'Data da Venda'}
+
 dados_csv = renomeando_colunas(dados_csv, key_mapping)
 nome_colunas_csv = get_columns(dados_csv)
 print(f"Novas colunas do arquivo csv: {nome_colunas_csv}")
@@ -100,6 +112,10 @@ tamanho_dados_fusao = tamanho_dados(dados_fusao)
 print(nomes_colunas_fusao)
 print(tamanho_dados_fusao)
 
+# salvando dados
+
+##  salvando os dados em uma nova estrutura, não mais em uma lista
+dados_fusao_tabela = trasformando_dados_tabela(dados_fusao, nomes_colunas_fusao)
 
 
 
