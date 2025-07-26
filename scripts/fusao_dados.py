@@ -3,21 +3,7 @@ import csv
 from processamento_dados import Dados
 
 
-# função para ver os nomes dads colunas
-def get_columns(dados):
-    return list(dados[0].keys())
 
-# função para renomear as colunas dos dados csv
-def renomeando_colunas(dados, key_mapping):
-    new_dados_csv = []
-
-    for old_dict in dados:
-        dict_temp = {}
-        for old_key, value in old_dict.items():
-            dict_temp[key_mapping[old_key]] = value
-        new_dados_csv.append(dict_temp)
-
-    return new_dados_csv
 
 # função para a contagem dos dados
 def tamanho_dados(dados):
@@ -52,9 +38,22 @@ def salvando_dados(caminho, dados):
 path_json = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaA.json'
 path_csv = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaB.csv'
 
-
+# Extração 
 dados_empresaA = Dados(path_json, 'json')
 dados_empresaB = Dados(path_csv, 'csv')
+
+print(f'Dados "brutos" sem a trasformação\nDADOS DA EMPRESA A:\n{dados_empresaA.dados[:5]}\nDADOS DA EMPRESA B:\n{dados_empresaB.dados[:5]}')
+
+# Transfomação 
+key_mapping = {'Nome do Item': 'Nome do Produto',
+               'ClassificaÃ§Ã£o do Produto': 'Categoria do Produto',
+               'Valor em Reais (R$)': 'Preço do Produto (R$)',
+               'Quantidade em Estoque': 'Quantidade em Estoque',
+               'Nome da Loja': 'Filial',
+               'Data da Venda': 'Data da Venda'}
+
+dados_empresaB.renomeando_colunas(key_mapping)
+print(f'\nApos a alteração dos nomes das colunas os dados da empresa B tem essas colunas:\n{dados_empresaB.nome_colunas}')
 
 
 # # leitura
