@@ -10,6 +10,7 @@ class Dados:
         self.tipo_dados = tipo_dados
         self.dados = self.leitura_dos_dados()
         self.nome_colunas = self.get_columns()
+        self.qtd_linhas = self.tamanho_dados()
         
 
         
@@ -21,6 +22,10 @@ class Dados:
 
         elif self.tipo_dados == 'json':
             dados = self.leitura_json()
+        
+        elif self.tipo_dados == 'list':
+            dados = self.path
+            self.path = 'lista em memoria'
 
         return dados
 
@@ -58,3 +63,32 @@ class Dados:
 
         self.dados = new_dados
         self.nome_colunas = self.get_columns()
+
+    def tamanho_dados(self):
+        return len(self.dados)
+    
+    def join(dadosA, dadosB):
+        lista_combinada = []
+        lista_combinada.extend(dadosA.dados)
+        lista_combinada.extend(dadosB.dados)
+
+        return Dados(lista_combinada, 'list')
+    
+    def trasformando_dados_tabela(self):
+        dados_combinados_tabela = [self.nome_colunas]
+
+        for row in self.dados:
+            linha = []
+            for coluna in self.nome_colunas:
+                linha.append(row.get(coluna, 'Indisponivel'))
+            dados_combinados_tabela.append(linha)
+
+        return dados_combinados_tabela
+        
+    def salvando_dados(self, path):
+        
+        dados_combinados_tabela = self.trasformando_dados_tabela()
+
+        with open(path, 'w') as file:
+            writer = csv.writer(file)
+            writer.writerows(dados_combinados_tabela)

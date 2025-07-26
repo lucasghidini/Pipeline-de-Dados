@@ -2,49 +2,19 @@ import json
 import csv
 from processamento_dados import Dados
 
-
-
-
-# função para a contagem dos dados
-def tamanho_dados(dados):
-    return len(dados)
-
-# função de juntar os dados
-def join(dadosA, dadosB):
-    lista_combinada = []
-    lista_combinada.extend(dadosA)
-    lista_combinada.extend(dadosB)
-    return lista_combinada
-
-# transformação dos dados em tabela
-def trasformando_dados_tabela(dados, nome_colunas):
-    dados_combinados_tabela = [nome_colunas]
-
-    for row in dados:
-        linha = []
-        for coluna in nome_colunas:
-            linha.append(row.get(coluna, 'Indisponivel'))
-        dados_combinados_tabela.append(linha)
-
-    return dados_combinados_tabela
-
-# salvar os dados
-def salvando_dados(caminho, dados):
-    with open(caminho, 'w') as file:
-        writer = csv.writer(file)
-        writer.writerows(dados)
-
-
 path_json = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaA.json'
 path_csv = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaB.csv'
 
 # Extração 
+
 dados_empresaA = Dados(path_json, 'json')
 dados_empresaB = Dados(path_csv, 'csv')
 
 print(f'Dados "brutos" sem a trasformação\nDADOS DA EMPRESA A:\n{dados_empresaA.dados[:5]}\nDADOS DA EMPRESA B:\n{dados_empresaB.dados[:5]}')
+print(f'\nOs dados da empresa A tem: {dados_empresaA.tamanho_dados()} linhas\nOs dados da empreasa B tem {dados_empresaB.tamanho_dados()} linhas')
 
 # Transfomação 
+
 key_mapping = {'Nome do Item': 'Nome do Produto',
                'ClassificaÃ§Ã£o do Produto': 'Categoria do Produto',
                'Valor em Reais (R$)': 'Preço do Produto (R$)',
@@ -53,52 +23,13 @@ key_mapping = {'Nome do Item': 'Nome do Produto',
                'Data da Venda': 'Data da Venda'}
 
 dados_empresaB.renomeando_colunas(key_mapping)
-print(f'\nApos a alteração dos nomes das colunas os dados da empresa B tem essas colunas:\n{dados_empresaB.nome_colunas}')
+print(f'\nApós a alteração dos nomes das colunas dos dados da empresa B essas são as colunas:\n{dados_empresaB.nome_colunas}')
 
+dados_fusao = Dados.join(dados_empresaB, dados_empresaA)
+print(f'\nApós a junção dos dados, essas são as colunas:\n{dados_fusao.nome_colunas}\nE essa é a quantidade de linhas:\n{dados_fusao.qtd_linhas}')
 
-# # leitura
-# dados_json = leitura_dos_dados(path_json, 'json')
-# nome_colunas_json = get_columns(dados_json)
-# print(f'nome das colunas do arquivo json: {nome_colunas_json}')
+# Salvar os dados
 
-# dados_csv = leitura_dos_dados(path_csv, 'csv')
-# nome_colunas_csv = get_columns(dados_csv)
-# print(f'Nome das colunas do arquivo csv: {nome_colunas_csv}')
-
-# # transformação dos dados
-# key_mapping = {'Nome do Item': 'Nome do Produto',
-#                'ClassificaÃ§Ã£o do Produto': 'Categoria do Produto',
-#                'Valor em Reais (R$)': 'Preço do Produto (R$)',
-#                'Quantidade em Estoque': 'Quantidade em Estoque',
-#                'Nome da Loja': 'Filial',
-#                'Data da Venda': 'Data da Venda'}
-
-# dados_csv = renomeando_colunas(dados_csv, key_mapping)
-# nome_colunas_csv = get_columns(dados_csv)
-# print(f"Novas colunas do arquivo csv: {nome_colunas_csv}")
-
-# # Calculando o tamanho dos dados
-# tamanho_dados_csv = tamanho_dados(dados_csv)
-# print(f'Tamanho dos dados csv: {tamanho_dados_csv}')
-
-# tamanho_dados_json = tamanho_dados(dados_json)
-# print(f'Tamanho dos dados json: {tamanho_dados_json}')
-
-# # Junção dos dados
-# dados_fusao = join(dados_csv, dados_json)
-# nomes_colunas_fusao = get_columns(dados_fusao)
-# tamanho_dados_fusao = tamanho_dados(dados_fusao)
-
-# print(nomes_colunas_fusao)
-# print(tamanho_dados_fusao)
-
-# # salvando dados
-
-# # salvando os dados em uma nova estrutura, não mais em uma lista
-# dados_fusao_tabela = trasformando_dados_tabela(
-#     dados_fusao, nomes_colunas_fusao)
-
-# path_dados_combinados = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_processed\dados_combinados.csv'
-
-# salvando_dados(path_dados_combinados, dados_fusao_tabela)
-# print(path_dados_combinados)
+path_dados_combinados = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_processed\dados_combinados.csv'
+dados_fusao.salvando_dados(path_dados_combinados)
+print(f'\nAssim que efetuado todas as etapas nosso arquivo vai ser salvo nesse caminho:\n{path_dados_combinados}')
