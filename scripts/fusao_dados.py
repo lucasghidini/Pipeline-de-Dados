@@ -1,10 +1,12 @@
 import json
 import csv
+from processamento_dados import Dados
+
 
 # função de ler e ver o tipo do dado(csv ou json)
 def leitura_dos_dados(path, tipo_arquivo):
     dados = []
-    
+
     if tipo_arquivo == 'csv':
         dados = leitura_csv(path)
 
@@ -14,19 +16,19 @@ def leitura_dos_dados(path, tipo_arquivo):
     return dados
 
 # função de leitura dos dados .json
-def  leitura_json(path_json):
+def leitura_json(path_json):
     dados_json = []
     with open(path_json, 'r') as file:
         dados_json = json.load(file)
 
     return dados_json
 
-# função de leitura dos dados .csv   
+# função de leitura dos dados .csv
 def leitura_csv(path_csv):
 
     dados_csv = []
     with open(path_csv, 'r') as file:
-        spamreader = csv.DictReader(file, delimiter= ',')
+        spamreader = csv.DictReader(file, delimiter=',')
         for row in spamreader:
             dados_csv.append(row)
 
@@ -45,7 +47,6 @@ def renomeando_colunas(dados, key_mapping):
         for old_key, value in old_dict.items():
             dict_temp[key_mapping[old_key]] = value
         new_dados_csv.append(dict_temp)
-  
 
     return new_dados_csv
 
@@ -69,7 +70,7 @@ def trasformando_dados_tabela(dados, nome_colunas):
         for coluna in nome_colunas:
             linha.append(row.get(coluna, 'Indisponivel'))
         dados_combinados_tabela.append(linha)
-    
+
     return dados_combinados_tabela
 
 # salvar os dados
@@ -83,48 +84,54 @@ path_json = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_e
 path_csv = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_empresaB.csv'
 
 
-# leitura
-dados_json = leitura_dos_dados(path_json, 'json')
-nome_colunas_json = get_columns(dados_json)
-print(f'nome das colunas do arquivo json: {nome_colunas_json}')
+dados_empresaA = Dados(path_json, 'json')
 
-dados_csv = leitura_dos_dados(path_csv, 'csv')
-nome_colunas_csv = get_columns(dados_csv)
-print(f'Nome das colunas do arquivo csv: {nome_colunas_csv}')
 
-# transformação dos dados
-key_mapping = {'Nome do Item': 'Nome do Produto',
-                'ClassificaÃ§Ã£o do Produto': 'Categoria do Produto',
-                'Valor em Reais (R$)': 'Preço do Produto (R$)',
-                'Quantidade em Estoque': 'Quantidade em Estoque',
-                'Nome da Loja': 'Filial',
-                'Data da Venda': 'Data da Venda'}
 
-dados_csv = renomeando_colunas(dados_csv, key_mapping)
-nome_colunas_csv = get_columns(dados_csv)
-print(f"Novas colunas do arquivo csv: {nome_colunas_csv}")
 
-# Calculando o tamanho dos dados
-tamanho_dados_csv = tamanho_dados(dados_csv)
-print(f'Tamanho dos dados csv: {tamanho_dados_csv}')
+# # leitura
+# dados_json = leitura_dos_dados(path_json, 'json')
+# nome_colunas_json = get_columns(dados_json)
+# print(f'nome das colunas do arquivo json: {nome_colunas_json}')
 
-tamanho_dados_json = tamanho_dados(dados_json)
-print(f'Tamanho dos dados json: {tamanho_dados_json}')
+# dados_csv = leitura_dos_dados(path_csv, 'csv')
+# nome_colunas_csv = get_columns(dados_csv)
+# print(f'Nome das colunas do arquivo csv: {nome_colunas_csv}')
 
-# Junção dos dados
-dados_fusao = join(dados_csv, dados_json)
-nomes_colunas_fusao = get_columns(dados_fusao)
-tamanho_dados_fusao = tamanho_dados(dados_fusao)
+# # transformação dos dados
+# key_mapping = {'Nome do Item': 'Nome do Produto',
+#                'ClassificaÃ§Ã£o do Produto': 'Categoria do Produto',
+#                'Valor em Reais (R$)': 'Preço do Produto (R$)',
+#                'Quantidade em Estoque': 'Quantidade em Estoque',
+#                'Nome da Loja': 'Filial',
+#                'Data da Venda': 'Data da Venda'}
 
-print(nomes_colunas_fusao)
-print(tamanho_dados_fusao)
+# dados_csv = renomeando_colunas(dados_csv, key_mapping)
+# nome_colunas_csv = get_columns(dados_csv)
+# print(f"Novas colunas do arquivo csv: {nome_colunas_csv}")
 
-# salvando dados
+# # Calculando o tamanho dos dados
+# tamanho_dados_csv = tamanho_dados(dados_csv)
+# print(f'Tamanho dos dados csv: {tamanho_dados_csv}')
 
-##  salvando os dados em uma nova estrutura, não mais em uma lista
-dados_fusao_tabela = trasformando_dados_tabela(dados_fusao, nomes_colunas_fusao)
+# tamanho_dados_json = tamanho_dados(dados_json)
+# print(f'Tamanho dos dados json: {tamanho_dados_json}')
 
-path_dados_combinados = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_processed\dados_combinados.csv'
+# # Junção dos dados
+# dados_fusao = join(dados_csv, dados_json)
+# nomes_colunas_fusao = get_columns(dados_fusao)
+# tamanho_dados_fusao = tamanho_dados(dados_fusao)
 
-salvando_dados(path_dados_combinados,dados_fusao_tabela)
-print(path_dados_combinados)
+# print(nomes_colunas_fusao)
+# print(tamanho_dados_fusao)
+
+# # salvando dados
+
+# # salvando os dados em uma nova estrutura, não mais em uma lista
+# dados_fusao_tabela = trasformando_dados_tabela(
+#     dados_fusao, nomes_colunas_fusao)
+
+# path_dados_combinados = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_processed\dados_combinados.csv'
+
+# salvando_dados(path_dados_combinados, dados_fusao_tabela)
+# print(path_dados_combinados)
