@@ -3,37 +3,6 @@ import csv
 from processamento_dados import Dados
 
 
-# função de ler e ver o tipo do dado(csv ou json)
-def leitura_dos_dados(path, tipo_arquivo):
-    dados = []
-
-    if tipo_arquivo == 'csv':
-        dados = leitura_csv(path)
-
-    elif tipo_arquivo == 'json':
-        dados = leitura_json(path)
-
-    return dados
-
-# função de leitura dos dados .json
-def leitura_json(path_json):
-    dados_json = []
-    with open(path_json, 'r') as file:
-        dados_json = json.load(file)
-
-    return dados_json
-
-# função de leitura dos dados .csv
-def leitura_csv(path_csv):
-
-    dados_csv = []
-    with open(path_csv, 'r') as file:
-        spamreader = csv.DictReader(file, delimiter=',')
-        for row in spamreader:
-            dados_csv.append(row)
-
-    return dados_csv
-
 # função para ver os nomes dads colunas
 def get_columns(dados):
     return list(dados[0].keys())
@@ -85,8 +54,7 @@ path_csv = r'C:\Users\Lucas\Desktop\Projetos\pipeline de dados\data_raw\dados_em
 
 
 dados_empresaA = Dados(path_json, 'json')
-
-
+dados_empresaB = Dados(path_csv, 'csv')
 
 
 # # leitura
